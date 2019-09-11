@@ -30,10 +30,7 @@ RUN wget https://raw.githubusercontent.com/mavlink/mavros/master/mavros/scripts/
 RUN chmod +x install_geographiclib_datasets.sh
 RUN ./install_geographiclib_datasets.sh
 
-RUN apt-get update && apt-get install -y ros-melodic-move-base ros-melodic-move-base-msgs ros-melodic-desktop-full ros-melodic-slam-gmapping ros-melodic-map-server ssh ros-melodic-rosbridge-suite ros-melodic-apriltag-ros ros-melodic-turtlebot3-gazebo python-opencv python-wxgtk3.0 python3-pip python3-matplotlib python-pygame python3-lxml python3-yaml socat ros-melodic-mavros ros-melodic-mavros-extras ros-melodic-mavros-msgs vim wget screen sudo lsb-release tzdata wget ros-melodic-mavros ros-melodic-mavros-extras ros-melodic-mavros-msgs ros-melodic-turtlebot3
-RUN pip3 install --upgrade pip
-RUN pip3 install MAVProxy
-RUN apt-get install -y ros-melodic-dwa-local-planner
+RUN apt-get update && apt-get install -y ros-melodic-move-base ros-melodic-move-base-msgs ros-melodic-desktop-full ros-melodic-slam-gmapping ros-melodic-map-server ssh ros-melodic-rosbridge-suite ros-melodic-apriltag-ros ros-melodic-turtlebot3-gazebo python-opencv python-wxgtk3.0 python3-pip python3-matplotlib python-pygame python3-lxml python3-yaml socat ros-melodic-mavros ros-melodic-mavros-extras ros-melodic-mavros-msgs vim wget screen sudo lsb-release tzdata wget ros-melodic-mavros ros-melodic-mavros-extras ros-melodic-mavros-msgs ros-melodic-turtlebot3 ros-melodic-dwa-local-planner
 
 # Configure Bash & Screen
 RUN echo ". /opt/ros/melodic/setup.bash" >> ~/.bashrc 
