@@ -33,23 +33,33 @@ RUN ./install_geographiclib_datasets.sh
 RUN apt-get update && apt-get install -y ros-melodic-move-base ros-melodic-move-base-msgs ros-melodic-desktop-full ros-melodic-slam-gmapping ros-melodic-map-server ssh ros-melodic-rosbridge-suite ros-melodic-apriltag-ros ros-melodic-turtlebot3-gazebo python-opencv python-wxgtk3.0 python3-pip python3-matplotlib python-pygame python3-lxml python3-yaml socat ros-melodic-mavros ros-melodic-mavros-extras ros-melodic-mavros-msgs vim wget screen sudo lsb-release tzdata wget ros-melodic-mavros ros-melodic-mavros-extras ros-melodic-mavros-msgs ros-melodic-turtlebot3
 RUN pip3 install --upgrade pip
 RUN pip3 install MAVProxy
+RUN apt-get install -y ros-melodic-dwa-local-planner
 
 # Configure Bash & Screen
 RUN echo ". /opt/ros/melodic/setup.bash" >> ~/.bashrc 
 RUN echo "defshell -bash" > ~/.screenrc
 
 # Start Scripts for Robot
-COPY startGazebo.sh /
-COPY startRViz.sh /
-COPY startMoveBase.sh /
 COPY start.sh /
+COPY startAmcl.sh /
+COPY startGazebo.sh /
+COPY startGmapping.sh /
+COPY startMoveBase.sh /
+COPY startRViz.sh /
+COPY startRemote.sh /
 COPY stop.sh /
 
+# Add some launch files to TurtleBot
+COPY turtlebot3_amcl.launch /opt/ros/melodic/share/turtlebot3_slam/launch/
+COPY turtlebot3_remote.launch /opt/ros/melodic/share/turtlebot3_slam/launch/
+COPY turtlebot3_movebase.launch /opt/ros/melodic/share/turtlebot3_slam/launch/
+COPY turtlebot3_rviz.launch /opt/ros/melodic/share/turtlebot3_slam/launch/
+
 # MoveBase configs
-RUN mkdir -p /ros_ws/src/
-COPY rover_launcher.zip /ros_ws/src/
-RUN cd /ros_ws/src && unzip rover_launcher.zip ; cd -
-COPY nav_map_indoor.launch ros_ws/src/rover_launcher/launch/nav_map_indoor.launch
+#RUN mkdir -p /ros_ws/src/
+#COPY rover_launcher.zip /ros_ws/src/
+#RUN cd /ros_ws/src && unzip rover_launcher.zip ; cd -
+#COPY nav_map_indoor.launch ros_ws/src/rover_launcher/launch/nav_map_indoor.launch
 
 # Entrypoint
 COPY entrypoint.sh /
