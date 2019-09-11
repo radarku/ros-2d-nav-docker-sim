@@ -1,4 +1,4 @@
 #!/bin/bash
 source /opt/ros/melodic/setup.bash
 export TURTLEBOT3_MODEL=waffle 
-roslaunch turtlebot3_slam turtlebot3_rviz.launch
+roslaunch turtlebot3_slam turtlebot3_remote.launch
