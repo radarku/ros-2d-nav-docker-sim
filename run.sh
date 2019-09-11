@@ -1,1 +1,1 @@
-docker run -it turtlebot
+docker run --rm -it turtlebot
