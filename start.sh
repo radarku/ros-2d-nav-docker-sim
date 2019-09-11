@@ -8,3 +8,5 @@ sleep 5
 screen -dmS gmapping ./startGmapping.sh
 sleep 5
 screen -dmS movebase ./startMoveBase.sh
+sleep 5
+screen -dmS rosbridge ./startRosBridge.sh

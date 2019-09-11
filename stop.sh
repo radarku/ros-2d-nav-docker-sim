@@ -5,3 +5,4 @@ screen -X -S gmapping kill
 screen -X -S movebase kill
 screen -X -S rviz kill
 screen -X -S nav kill
+screen -X -S rosbridge kill
