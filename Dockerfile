@@ -44,6 +44,7 @@ COPY startGmapping.sh /
 COPY startMoveBase.sh /
 COPY startRViz.sh /
 COPY startRemote.sh /
+COPY startRosBridge.sh /
 COPY stop.sh /
 
 # Add some launch files to TurtleBot
