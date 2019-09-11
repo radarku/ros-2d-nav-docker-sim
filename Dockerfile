@@ -1,54 +1,8 @@
-FROM ubuntu:18.04
+FROM ros:melodic-perception
+LABEL maintainer Kyle Usbeck
 
-# Need Git to checkout our sources
-RUN apt-get update && apt-get install -y git
-
-# Download PX4 requirements
 # Trick to get apt-get to not prompt for timezone in tzdata
 ENV DEBIAN_FRONTEND=noninteractive
-
-# Need sudo and lsb-release for the installation prerequisites
-RUN apt-get install -y sudo lsb-release tzdata wget
-#RUN wget https://raw.githubusercontent.com/PX4/Devguide/master/build_scripts/ubuntu_sim_common_deps.sh
-RUN wget https://raw.githubusercontent.com/PX4/Devguide/master/build_scripts/ubuntu_sim.sh
-RUN chmod +x ubuntu_sim.sh
-RUN ./ubuntu_sim.sh
-
-# Now grab ArduPilot from GitHub
-RUN git clone https://github.com/PX4/Firmware.git
-WORKDIR Firmware
-
-# Checkout the right branch/tag
-#RUN git checkout ???
-
-# Pull submodules
-RUN git submodule update --init --recursive
-
-#############################
-# Enable Plugins
-
-# Gstreamer for video
-RUN sed -i -e 's/option(BUILD_GSTREAMER_PLUGIN "enable gstreamer plugin" OFF)/option(BUILD_GSTREAMER_PLUGIN "enable gstreamer plugin" ON)/g' Tools/sitl_gazebo/CMakeLists.txt
-# Fix Old-style APT repos (https://askubuntu.com/questions/549777/getting-404-not-found-errors-when-doing-sudo-apt-get-update)
-RUN sed -i -e 's/:\/\/(archive.ubuntu.com\|security.ubuntu.com)/old-releases.ubuntu.com/g' /etc/apt/sources.list
-RUN apt-get update
-# Install GStreamer
-RUN apt-get install $(apt-cache --names-only search ^gstreamer1.0-* | awk '{ print $1 }' | grep -v gstreamer1.0-hybris | grep -v gstreamer1.0-python3-dbg-plugin-loader) -y
-
-# END Enable Plugins
-#############################
-
-# Now start build instructions from https://dev.px4.io/en/setup/building_px4.html
-# just build; don't run; https://github.com/PX4/Firmware/issues/3961
-RUN DONT_RUN=1 make px4_sitl_default gazebo
-
-# UDP 14550 is what the sim exposes by default
-#https://dev.px4.io/en/simulation/
-
-# Proxy MAVLink
-RUN apt-get install -y python3-dev python-opencv python-wxgtk3.0 python3-pip python3-matplotlib python-pygame python3-lxml python3-yaml socat
-RUN pip3 install --upgrade pip
-RUN pip3 install MAVProxy
 
 # install GLX-Gears and the GL Vendor-Neutral Dispatch library
 RUN apt-get update && apt-get install -y \
@@ -68,8 +22,34 @@ ENV PX4_HOME_LON -71.1476
 ENV PX4_HOME_ALT 14.2
 ENV HOST_IP 192.168.1.211
 
-# Fix a bug in GeoCoded photos
-COPY typhoon_h480.sdf /Firmware/Tools/sitl_gazebo/models/typhoon_h480/
+# Install MAVROS and some other dependencies for later
+RUN apt-get update && apt-get install -y git vim wget screen sudo lsb-release tzdata wget
+
+# Dependency from https://github.com/mavlink/mavros/blob/master/mavros/README.md
+RUN wget https://raw.githubusercontent.com/mavlink/mavros/master/mavros/scripts/install_geographiclib_datasets.sh
+RUN chmod +x install_geographiclib_datasets.sh
+RUN ./install_geographiclib_datasets.sh
+
+RUN apt-get update && apt-get install -y ros-melodic-move-base ros-melodic-move-base-msgs ros-melodic-desktop-full ros-melodic-slam-gmapping ros-melodic-map-server ssh ros-melodic-rosbridge-suite ros-melodic-apriltag-ros ros-melodic-turtlebot3-gazebo python-opencv python-wxgtk3.0 python3-pip python3-matplotlib python-pygame python3-lxml python3-yaml socat ros-melodic-mavros ros-melodic-mavros-extras ros-melodic-mavros-msgs vim wget screen sudo lsb-release tzdata wget ros-melodic-mavros ros-melodic-mavros-extras ros-melodic-mavros-msgs ros-melodic-turtlebot3
+RUN pip3 install --upgrade pip
+RUN pip3 install MAVProxy
+
+# Configure Bash & Screen
+RUN echo ". /opt/ros/melodic/setup.bash" >> ~/.bashrc 
+RUN echo "defshell -bash" > ~/.screenrc
+
+# Start Scripts for Robot
+COPY startGazebo.sh /
+COPY startRViz.sh /
+COPY startMoveBase.sh /
+COPY start.sh /
+COPY stop.sh /
+
+# MoveBase configs
+RUN mkdir -p /ros_ws/src/
+COPY rover_launcher.zip /ros_ws/src/
+RUN cd /ros_ws/src && unzip rover_launcher.zip ; cd -
+COPY nav_map_indoor.launch ros_ws/src/rover_launcher/launch/nav_map_indoor.launch
 
 # Entrypoint
 COPY entrypoint.sh /

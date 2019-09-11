@@ -1,0 +1,32 @@
+<launch>
+
+<!--
+  <arg name="device" default="TX2" doc="Type of processor being used. Reduces settings for PI.  options: [TX2, PI]"/>
+  <arg name="imu" default="RAZOR" doc="Type of IMU being used. options: [RAZOR, MAVROS, VECTORNAV]"/> 
+  <arg name="rs_manager" default="/camera/realsense2_camera_manager"/>
+
+  <node pkg="gmapping" type="slam_gmapping" name="GMAP" output="screen">
+    <rosparam file="$(env WS_PATH)/params/costmap_common.yaml" command="load" ns="global_costmap" /> 
+    <remap from="/odom" to ="/odom" />
+  </node>
+
+  <master auto="start"/>
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find gmapping)/maps/map.pgm 0.05">
+    <remap from="/odom" to ="/odom" />
+  </node>
+-->
+
+  <node pkg="move_base" type="move_base" respawn="false" name="MOVE" output="screen">
+    <rosparam file="$(env WS_PATH)/params/costmap_common.yaml" command="load" ns="global_costmap" /> 
+    <rosparam file="$(env WS_PATH)/params/costmap_common.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(env WS_PATH)/params/local_costmap.yaml" command="load" />
+    <rosparam file="$(env WS_PATH)/params/global_costmap.yaml" command="load" /> 
+    <rosparam file="$(env WS_PATH)/params/base_local_planner_indoor.yaml" command="load" />
+    <remap from="/odom" to ="/odom" />
+  </node>
+
+<!--
+  <node pkg="clear_costmap" type="clear_costmap.py" respawn="false" name="clear_costmap" output="screen" />
+-->
+
+</launch> 

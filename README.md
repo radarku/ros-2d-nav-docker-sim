@@ -1,8 +1,8 @@
 
-PX4 Video SITL
+TurtleBot Docker
 ==============
 
-This Docker Container spins-up a PX4 SITL and exports a representative video stream from the platform
+This Docker Container runs a TurtleBot Gazebo Simulation
 
 Usage
 -----
@@ -10,7 +10,7 @@ Usage
 To build the container
 
 ```
-docker build -t px4vid .
+./build.sh
 ```
 
 To run the container
@@ -33,6 +33,5 @@ Notes
 -----
 
 This project also has the base framework enabled for forwarding X11 through docker
-
 
 
