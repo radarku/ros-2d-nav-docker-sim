@@ -37,9 +37,9 @@ RUN echo ". /opt/ros/melodic/setup.bash" >> ~/.bashrc
 RUN echo "defshell -bash" > ~/.screenrc
 
 # Make our own workspace
-RUN mkdir -p /ros_ws/src/
-COPY frontier_exploration.tar.gz /ros_ws/src/
-RUN . /opt/ros/melodic/setup.sh && cd /ros_ws/src/ && tar -xzvf frontier_exploration.tar.gz && rm frontier_exploration.tar.gz && cd .. && catkin_make install; cd /
+#RUN mkdir -p /ros_ws/src/
+#COPY frontier_exploration.tar.gz /ros_ws/src/
+#RUN . /opt/ros/melodic/setup.sh && cd /ros_ws/src/ && tar -xzvf frontier_exploration.tar.gz && rm frontier_exploration.tar.gz && cd .. && catkin_make install; cd /
 
 # Start Scripts for Robot
 COPY start.sh /

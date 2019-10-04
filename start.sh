@@ -9,8 +9,8 @@ screen -dmS gmapping ./startGmapping.sh
 sleep 5
 screen -dmS movebase ./startMoveBase.sh
 sleep 5
-screen -dmS frontier ./startFrontier.sh
-sleep 5
+#screen -dmS frontier ./startFrontier.sh
+#sleep 5
 screen -dmS rosbridge ./startRosBridge.sh
 sleep 2
 screen -dmS rviz ./startRViz.sh
