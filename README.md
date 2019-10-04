@@ -1,8 +1,8 @@
 
-TurtleBot Docker
-==============
+Rover Docker SITL
+=================
 
-This Docker Container runs a TurtleBot Gazebo Simulation
+This Docker Container runs a standalone Rover Gazebo Simulation with a navigation stack for testing
 
 Usage
 -----
@@ -33,5 +33,4 @@ Notes
 -----
 
 This project also has the base framework enabled for forwarding X11 through docker
-
 
