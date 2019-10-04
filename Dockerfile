@@ -58,7 +58,7 @@ COPY turtlebot3_amcl.launch /opt/ros/melodic/share/turtlebot3_slam/launch/
 COPY turtlebot3_remote.launch /opt/ros/melodic/share/turtlebot3_slam/launch/
 COPY turtlebot3_movebase.launch /opt/ros/melodic/share/turtlebot3_slam/launch/
 COPY turtlebot3_rviz.launch /opt/ros/melodic/share/turtlebot3_slam/launch/
-COPY turtlebot3_house_no_x.launch /opt/ros/melodic/share/turtlebot3_gazebo/launch/
+COPY turtlebot3_house.launch /opt/ros/melodic/share/turtlebot3_gazebo/launch/
 COPY turtlebot3_waffle.gazebo.xacro /opt/ros/melodic/share/turtlebot3_description/urdf/
 
 # Entrypoint
