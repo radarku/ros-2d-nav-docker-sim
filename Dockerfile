@@ -30,13 +30,23 @@ RUN wget https://raw.githubusercontent.com/mavlink/mavros/master/mavros/scripts/
 RUN chmod +x install_geographiclib_datasets.sh
 RUN ./install_geographiclib_datasets.sh
 
-RUN apt-get update && apt-get install -y ros-melodic-move-base ros-melodic-move-base-msgs ros-melodic-desktop-full ros-melodic-slam-gmapping ros-melodic-map-server ssh ros-melodic-rosbridge-suite ros-melodic-apriltag-ros ros-melodic-turtlebot3-gazebo python-opencv python-wxgtk3.0 python3-pip python3-matplotlib python-pygame python3-lxml python3-yaml socat ros-melodic-mavros ros-melodic-mavros-extras ros-melodic-mavros-msgs vim wget screen sudo lsb-release tzdata wget ros-melodic-mavros ros-melodic-mavros-extras ros-melodic-mavros-msgs ros-melodic-turtlebot3 ros-melodic-dwa-local-planner ros-melodic-hector-gazebo ros-melodic-hector-components-description ros-melodic-hector-models ros-melodic-hector-sensors-description ros-melodic-hector-sensors-gazebo 
+RUN apt-get update && apt-get install -y ros-melodic-move-base ros-melodic-move-base-msgs ros-melodic-desktop-full ros-melodic-slam-gmapping ros-melodic-map-server ssh ros-melodic-rosbridge-suite ros-melodic-apriltag-ros ros-melodic-turtlebot3-gazebo python-opencv python-wxgtk3.0 python3-pip python3-matplotlib python-pygame python3-lxml python3-yaml socat ros-melodic-mavros ros-melodic-mavros-extras ros-melodic-mavros-msgs vim wget screen sudo lsb-release tzdata wget ros-melodic-mavros ros-melodic-mavros-extras ros-melodic-mavros-msgs ros-melodic-turtlebot3 ros-melodic-dwa-local-planner ros-melodic-hector-gazebo ros-melodic-hector-components-description ros-melodic-hector-models ros-melodic-hector-sensors-description ros-melodic-hector-sensors-gazebo libgps-dev
+
+# Make our own workspace
+RUN mkdir -p ~/catkin_ws/src
+RUN . /opt/ros/melodic/setup.sh && cd ~/catkin_ws/ && catkin_make; cd -
+
+# GPS Translator
+RUN apt-get update && apt-get install -y ros-melodic-gpsd-client ros-melodic-gps-common ros-melodic-gps-umd
+RUN cd ~/catkin_ws/src/ && git clone https://github.com/swri-robotics/gps_umd.git; cd -
+COPY fix_translator.launch ~/catkin_ws/src/gps_umd/gps_common/launch/
+RUN . /opt/ros/melodic/setup.sh && cd ~/catkin_ws/ && catkin_make; cd -
 
 # Configure Bash & Screen
 RUN echo ". /opt/ros/melodic/setup.bash" >> ~/.bashrc 
+RUN echo ". ~/catkin_ws/devel/setup.bash" >> ~/.bashrc 
 RUN echo "defshell -bash" > ~/.screenrc
 
-# Make our own workspace
 #RUN mkdir -p /ros_ws/src/
 #COPY frontier_exploration.tar.gz /ros_ws/src/
 #RUN . /opt/ros/melodic/setup.sh && cd /ros_ws/src/ && tar -xzvf frontier_exploration.tar.gz && rm frontier_exploration.tar.gz && cd .. && catkin_make install; cd /
