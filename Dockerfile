@@ -42,6 +42,11 @@ RUN cd ~/catkin_ws/src/ && git clone https://github.com/swri-robotics/gps_umd.gi
 COPY fix_translator.launch ~/catkin_ws/src/gps_umd/gps_common/launch/
 RUN . /opt/ros/melodic/setup.sh && cd ~/catkin_ws/ && catkin_make; cd -
 
+# frontier_exploration
+RUN cd ~/catkin_ws/src/ && git clone https://github.com/paulbovbel/frontier_exploration.git; cd -
+RUN . /opt/ros/melodic/setup.sh && cd ~/catkin_ws/ && catkin_make -j 8; catkin_make; cd -
+# NOTE: the first catkin_make fails but it has to have a bunch of threads to keep going, so it must be run twice here!
+
 # Configure Bash & Screen
 RUN echo ". /opt/ros/melodic/setup.bash" >> ~/.bashrc 
 RUN echo ". ~/catkin_ws/devel/setup.bash" >> ~/.bashrc 
